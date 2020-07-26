@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SalesAPI.Entities
+namespace API.Entities
 {
     public class Product
     {

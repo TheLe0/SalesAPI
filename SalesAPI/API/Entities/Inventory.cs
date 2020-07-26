@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SalesAPI.Entities
+namespace API.Entities
 {
     public class Inventory
     {
@@ -8,7 +8,7 @@ namespace SalesAPI.Entities
         public Warehouse[] WarehouseList { set; get; }
         public int Quantity { protected set; get; }
         public Product Product { set; get; }
-
+        
         public Inventory(Warehouse[] warehouse, Product product)
         {
             Id = Guid.NewGuid();
