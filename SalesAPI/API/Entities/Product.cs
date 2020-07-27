@@ -8,17 +8,21 @@ namespace API.Entities
         public int Sku { set; get; }
         public string Name { set; get; }
         public bool IsMarketable { protected set; get; }
+        public Inventory Inventory { protected set; get; }
 
-        public Product(int sku, string name)
+        public Product(int sku, string name, Inventory inventory)
         {
             Sku = sku;
             Name = name;
             Id = Guid.NewGuid();
+            Inventory = inventory;
+
+            Marketable();
         }
 
-        public void Marketable(Inventory inventory)
+        public void Marketable()
         {
-            IsMarketable = (inventory.Quantity > 0);
+            IsMarketable = (Inventory.Quantity > 0);
         }
     }
 }

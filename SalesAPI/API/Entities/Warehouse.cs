@@ -9,11 +9,8 @@ namespace API.Entities
         public string Locality { set; get; }
         public string Type { set; get; }
 
-        public Inventory Inventory { set; get; }
-
-        public Warehouse(Inventory inventory, int quantity, string locality, string type)
+        public Warehouse(int quantity, string locality, string type)
         {
-            Inventory = inventory;
             Quantity = quantity;
             Locality = locality;
             Type = type;
