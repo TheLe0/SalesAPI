@@ -1,24 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace API.Entities
 {
     public class Inventory
     {
         public Guid Id { protected set; get; }
-        public Warehouse[] WarehouseList { set; get; }
+        public List<Warehouse> Warehouses { set; get; }
         public int Quantity { protected set; get; }
         
-        public Inventory(Warehouse[] warehouse)
+        public Inventory(List<Warehouse> warehouse)
         {
             Id = Guid.NewGuid();
-            WarehouseList = warehouse;
+            Warehouses = warehouse;
 
             Quantity = 0;
-            for (int i = 0; i <= warehouse.Length; i++)
+            foreach(Warehouse w in Warehouses)
             {
-                Quantity += warehouse[i].Quantity;
+                Quantity += w.Quantity;
             }
-
         }
     }
 }
