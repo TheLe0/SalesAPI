@@ -6,7 +6,6 @@ namespace API.Entities
 {
     public class Warehouse
     {
-        public Guid Id { protected set; get; }
         public int Quantity { set; get; }
         public string Locality { set; get; }
         public string Type { set; get; }
@@ -16,7 +15,6 @@ namespace API.Entities
             Quantity = quantity;
             Locality = locality;
             Type = type;
-            Id = Guid.NewGuid();
         }
     }
 }
