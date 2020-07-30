@@ -9,7 +9,7 @@ using API.Entities;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class SalesController : ControllerBase
     {
         private readonly ILogger<SalesController> _logger;
@@ -20,7 +20,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public Product Get()
+        public IActionResult Get()
         {
             List<Warehouse> warehouses = new List<Warehouse>
             {
@@ -34,7 +34,42 @@ namespace API.Controllers
 
             Product product = new Product(sku, name, inventory);
 
-            return product;
+            return Ok(product);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int sku)
+        {
+            List<Warehouse> warehouses = new List<Warehouse>
+            {
+                new Warehouse(12, "SP", "ECOMMERCE"),
+                new Warehouse(3, "MOEMA", "PHYSICAL_STORE")
+            };
+            Inventory inventory = new Inventory(warehouses);
+
+            var name = "L'Oréal Professionnel Expert Absolut Repair Cortex Lipidium - Máscara de Reconstrução 500g";
+
+            Product product = new Product(sku, name, inventory);
+
+            return Ok(product);
+        }
+
+        [HttpPost]
+        public IActionResult Post(Product product)
+        {
+            return Ok("Successfully inserted the new record");
+        }
+
+        [HttpPut]
+        public IActionResult Put(int sku, Product product)
+        {
+            return Ok("Successfully updated the  record");
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int sku)
+        {
+            return Ok("Successfully removed the  record");
         }
     }
 }
