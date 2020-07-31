@@ -1,9 +1,8 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace API.Entities
 {
-    public class Inventory
+    public class Inventory : Entity
     {
         public List<Warehouse> Warehouses { set; get; }
         public int Quantity { protected set; get; }
