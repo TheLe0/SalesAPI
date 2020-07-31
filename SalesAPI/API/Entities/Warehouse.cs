@@ -1,10 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-
-using System;
-
 namespace API.Entities
 {
-    public class Warehouse
+    public class Warehouse : Entity
     {
         public int Quantity { set; get; }
         public string Locality { set; get; }
