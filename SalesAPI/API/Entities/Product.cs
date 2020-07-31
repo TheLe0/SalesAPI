@@ -1,8 +1,6 @@
-﻿using System;
-
 namespace API.Entities
 {
-    public class Product
+    public class Product : Entity
     {
         public int Sku { set; get; }
         public string Name { set; get; }
