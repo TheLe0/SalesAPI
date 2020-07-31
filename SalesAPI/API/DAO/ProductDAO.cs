@@ -36,5 +36,20 @@ namespace API.DAO
 
             return _list;
         }
+
+        public static bool Delete(int sku)
+        {
+            using (var connection = new SqlConnection(Configuration.GetInstance().GetConnectionString()))
+            {
+                var sql = @"DELETE FROM PRODUCT WHERE SKU = @Sku";
+                connection.Execute(sql, new {Sku = sku });
+
+                sql = @"DELETE FROM WAREHOUSE WHERE SKU = @Sku";
+                connection.Execute(sql, new { Sku = sku });
+
+            }
+
+            return true;
+        }
     }
 }

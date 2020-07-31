@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using API.DAO;
 using API.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Controllers
 {
@@ -67,9 +68,15 @@ namespace API.Controllers
         }
 
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int sku)
         {
-            return Ok("Successfully removed the  record");
+            if (ProductDAO.Delete(sku) && sku > 0)
+            {
+                return Ok("Successfully removed the  record");
+            }
+
+            return BadRequest();
         }
     }
 }
