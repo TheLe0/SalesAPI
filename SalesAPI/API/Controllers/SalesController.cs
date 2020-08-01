@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,6 @@ using Microsoft.Extensions.Logging;
 
 using API.DAO;
 using API.Entities;
-using API.Exceptions;
 
 namespace API.Controllers
 {
@@ -24,31 +22,30 @@ namespace API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Get()
-        {
-            return BadRequest("List all products is not allowed! Please inform a Sku.");
-        }
-
-        [HttpGet("{id}")]
         public IActionResult Get(int sku)
         {
-            List<Warehouse> warehouses = new List<Warehouse>
+            if (sku <= 0)
             {
-                new Warehouse(12, "SP", "ECOMMERCE"),
-                new Warehouse(3, "MOEMA", "PHYSICAL_STORE")
-            };
+                return BadRequest("Please inform a Sku!");
+            }
+
+            if (!ProductDAO.Exists(sku))
+            {
+                return BadRequest("The Sku is already in use!");
+            }
+
+            List<Warehouse> warehouses = WarehouseDAO.Find(sku);
+
             Inventory inventory = new Inventory(warehouses);
 
-            var name = "L'Oréal Professionnel Expert Absolut Repair Cortex Lipidium - Máscara de Reconstrução 500g";
-
-            Product product = new Product(sku, name, inventory);
+            Product product = new Product(sku, ProductDAO.Find(sku), inventory);
 
             return Ok(product);
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post(Product product)
+        public IActionResult Post([FromBody] Product product)
         {
             if (ProductDAO.Exists(product.Sku))
             {
@@ -66,9 +63,31 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put(int sku, Product product)
+        public IActionResult Put(int sku, [FromBody] Product product)
         {
-            return Ok("Successfully updated the  record");
+            if (sku <= 0)
+            {
+                return BadRequest("Please inform a Sku!");
+            }
+
+            if (!ProductDAO.Exists(sku))
+            {
+                return BadRequest("The Sku is already in use!");
+            }
+
+            WarehouseDAO.Delete(sku);
+
+            foreach(Warehouse w in product.Inventory.Warehouses)
+            {
+                WarehouseDAO.CreateRecord(w, sku);
+            }
+
+            if (ProductDAO.Update(product))
+            {
+                return Ok("Successfully updated the  record");
+            }
+
+            return BadRequest("Error while updating record!");
         }
 
         [HttpDelete]

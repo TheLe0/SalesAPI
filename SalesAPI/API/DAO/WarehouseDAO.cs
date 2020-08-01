@@ -3,7 +3,9 @@ using API.Entities;
 
 using Dapper;
 
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace API.DAO
 {
@@ -29,6 +31,20 @@ namespace API.DAO
             }
 
             return true;
+        }
+
+        public static List<Warehouse> Find(int sku)
+        {
+            List<Warehouse> list = new List<Warehouse>();
+
+            using (var connection = new SqlConnection(Configuration.GetInstance().GetConnectionString()))
+            {
+                var sql = @"SELECT LOCALITY, QUANTITY, TYPE FROM WAREHOUSE WHERE SKU = @Sku";
+
+                list = connection.Query<Warehouse>(sql, new { Sku = sku }).ToList();
+            }
+
+            return list;
         }
     }
 }

@@ -3,9 +3,7 @@ using API.Utils;
 
 using Dapper;
 
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 
 namespace API.DAO
 {
@@ -17,6 +15,17 @@ namespace API.DAO
             {
                 var sql = @"INSERT INTO PRODUCT(SKU, NAME) VALUES(@Sku, @Name)";
                 connection.Execute(sql, new { product.Sku, product.Name });
+            }
+
+            return true;
+        }
+
+        public static bool Update(Product product)
+        {
+            using (var connection = new SqlConnection(Configuration.GetInstance().GetConnectionString()))
+            {
+                var sql = @"UPDATE PRODUCT SET NAME = @Name";
+                connection.Execute(sql, new { product.Name });
             }
 
             return true;
@@ -43,6 +52,18 @@ namespace API.DAO
             }
 
             return rows > 0;
+        }
+
+        public static string Find(int sku)
+        {
+            string name;
+            using (var connection = new SqlConnection(Configuration.GetInstance().GetConnectionString()))
+            {
+                var sql = @"SELECT NAME FROM PRODUCT WHERE SKU = @Sku";
+                name = connection.QuerySingle<string>(sql, new { Sku = sku });
+            }
+
+            return name;
         }
     }
 }
