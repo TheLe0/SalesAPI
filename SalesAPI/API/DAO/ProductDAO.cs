@@ -11,30 +11,15 @@ namespace API.DAO
 {
     public class ProductDAO
     {
-        public static List<Product> ListAll()
+        public static bool CreateRecord(Product product)
         {
-            List<Product> _list = new List<Product>();
-
-            string query = @"
-                SELECT 
-                    P.SKU,
-                    P.NAME,
-                    W.LOCALITY,
-	                W.QUANTITY,
-	                W.TYPE
-                FROM 
-                    PRODUCT P
-                LEFT OUTER JOIN
-	                WAREHOUSE W
-		                ON W.SKU = P.SKU;
-            ";
-
             using (var connection = new SqlConnection(Configuration.GetInstance().GetConnectionString()))
             {
-                var productList = connection.Query<Product>(query).ToList();
+                var sql = @"INSERT INTO PRODUCT(SKU, NAME) VALUES(@Sku, @Name)";
+                connection.Execute(sql, new { product.Sku, product.Name });
             }
 
-            return _list;
+            return true;
         }
 
         public static bool Delete(int sku)
@@ -43,13 +28,21 @@ namespace API.DAO
             {
                 var sql = @"DELETE FROM PRODUCT WHERE SKU = @Sku";
                 connection.Execute(sql, new {Sku = sku });
-
-                sql = @"DELETE FROM WAREHOUSE WHERE SKU = @Sku";
-                connection.Execute(sql, new { Sku = sku });
-
             }
 
             return true;
+        }
+
+        public static bool Exists(int sku)
+        {
+            var rows = 0;
+            using (var connection = new SqlConnection(Configuration.GetInstance().GetConnectionString()))
+            {
+                var sql = @"SELECT COUNT(SKU) FROM PRODUCT WHERE SKU = @Sku";
+                rows = connection.QuerySingle<int>(sql, new { Sku = sku });
+            }
+
+            return rows > 0;
         }
     }
 }

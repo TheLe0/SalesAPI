@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using API.DAO;
 using API.Entities;
-using Microsoft.AspNetCore.Http;
+using API.Exceptions;
 
 namespace API.Controllers
 {
@@ -21,21 +23,10 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Get()
         {
-            List<Warehouse> warehouses = new List<Warehouse>
-            {
-                new Warehouse(12, "SP", "ECOMMERCE"),
-                new Warehouse(3, "MOEMA", "PHYSICAL_STORE")
-            };
-            Inventory inventory = new Inventory(warehouses);
-
-            var name = "L'Oréal Professionnel Expert Absolut Repair Cortex Lipidium - Máscara de Reconstrução 500g";
-            var sku = 43264;
-
-            Product product = new Product(sku, name, inventory);
-
-            return Ok(product);
+            return BadRequest("List all products is not allowed! Please inform a Sku.");
         }
 
         [HttpGet("{id}")]
@@ -56,8 +47,21 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Post(Product product)
         {
+            if (ProductDAO.Exists(product.Sku))
+            {
+                return BadRequest("The Sku is already in use!");
+            }
+
+            foreach(Warehouse w in product.Inventory.Warehouses)
+            {
+                WarehouseDAO.CreateRecord(w, product.Sku);
+            }
+
+            ProductDAO.CreateRecord(product);
+
             return Ok("Successfully inserted the new record");
         }
 
@@ -71,9 +75,12 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int sku)
         {
-            if (ProductDAO.Delete(sku) && sku > 0)
+            if (sku > 0)
             {
-                return Ok("Successfully removed the  record");
+                if (ProductDAO.Delete(sku) && WarehouseDAO.Delete(sku))
+                {
+                    return Ok("Successfully removed the  record");
+                }
             }
 
             return BadRequest();
