@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 using API.Entities;
 
@@ -14,9 +13,13 @@ namespace Tests.Entitites
             var locality = "SP";
             var type = "ECOMMERCE";
 
-            Warehouse warehouse = new Warehouse(quantity, locality, type);
+            Warehouse warehouse = new Warehouse
+            {
+                Quantity = quantity,
+                Locality = locality,
+                Type = type
+            };
 
-            Assert.NotEqual(warehouse.Id, Guid.Empty);
             Assert.Equal(quantity, warehouse.Quantity);
             Assert.Equal(locality, warehouse.Locality);
             Assert.Equal(type, warehouse.Type);

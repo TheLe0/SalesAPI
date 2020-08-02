@@ -4,21 +4,25 @@ namespace API.Entities
     {
         public int Sku { set; get; }
         public string Name { set; get; }
-        public Inventory Inventory { protected set; get; }
-        public bool IsMarketable { protected set; get; }
 
-        public Product(int sku, string name, Inventory inventory)
+        private Inventory _inventory;
+        public Inventory Inventory 
         {
-            Sku = sku;
-            Name = name;
-            Inventory = inventory;
-
-            Marketable();
+            set
+            {
+                _inventory = value;
+                Marketable();
+            }
+            get
+            {
+                return _inventory;
+            }
         }
+        public bool IsMarketable { set; get; }
 
         public void Marketable()
         {
-            IsMarketable = (Inventory.Quantity > 0);
+            IsMarketable = (_inventory.Quantity > 0);
         }
     }
 }

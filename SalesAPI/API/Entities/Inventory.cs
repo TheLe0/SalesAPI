@@ -4,18 +4,24 @@ namespace API.Entities
 {
     public class Inventory : Entity
     {
-        public List<Warehouse> Warehouses { set; get; }
-        public int Quantity { protected set; get; }
-        
-        public Inventory(List<Warehouse> warehouse)
-        {
-            Warehouses = warehouse;
-
-            Quantity = 0;
-            foreach(Warehouse w in Warehouses)
+        private List<Warehouse> _warehouses;
+        public List<Warehouse> Warehouses 
+        { 
+            set
             {
-                Quantity += w.Quantity;
+                _warehouses = value;
+                Quantity = 0;
+                foreach (Warehouse w in _warehouses)
+                {
+                    Quantity += w.Quantity;
+                }
+            }
+            get
+            {
+                return _warehouses;
             }
         }
+        public int Quantity { protected set; get; }
+        
     }
 }

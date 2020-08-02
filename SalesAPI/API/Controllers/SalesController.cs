@@ -36,9 +36,17 @@ namespace API.Controllers
 
             List<Warehouse> warehouses = WarehouseDAO.Find(sku);
 
-            Inventory inventory = new Inventory(warehouses);
+            Inventory inventory = new Inventory
+            {
+                Warehouses = warehouses
+            };
 
-            Product product = new Product(sku, ProductDAO.Find(sku), inventory);
+            Product product = new Product
+            {
+                Sku = sku,
+                Name = ProductDAO.Find(sku),
+                Inventory = inventory
+            };
 
             return Ok(product);
         }
