@@ -1,9 +1,10 @@
-# SalesAPI
-A Restfull API for Sales Management
+# SalesAPI #
 
-### Tarefas
+A REST API for Sales Management
 
-Com a seguinte representação de produto:
+## Specifications ##
+
+This is the json structure for input and output
 
 ```json
 {
@@ -28,32 +29,22 @@ Com a seguinte representação de produto:
 }
 ```
 
-Crie endpoints para as seguintes ações:
+Note: Only the proprieties  **isMarketable** and **inventory.quantity** are not stored on the database, they are calculated on the code.
 
-- Criação de produto onde o payload será o json informado acima (exceto as propriedades **isMarketable** e **inventory.quantity**)
+Is implemented endpoints for the followings REST methods:
 
-- Edição de produto por **sku**
+- __**POST**__, for create a new product;
 
-- Recuperação de produto por **sku**
+- __**PUT**__ a new product by **sku**
 
-- ~~Deleção de produto por **sku**~~
+- __**GET**__ a product by **sku**
 
-### Requisitos
+- __**DELETE**__ a product by **sku**
 
+## Requirements ##
 
-- Toda vez que um produto for recuperado por **sku** deverá ser calculado a propriedade: **inventory.quantity**
+- The RDBMS used was SQL Server, was created a database called SalesDB, and executed the script to create the tables on *./_sql/create_db.sql*
 
-        A propriedade inventory.quantity é a soma da quantity dos warehouses
+- To persist data was used the ORM Dapper;
 
-- Toda vez que um produto for recuperado por **sku** deverá ser calculado a propriedade: **isMarketable**
-
-        Um produto é marketable sempre que seu inventory.quantity for maior que 0
-
-- Caso um produto já existente em memória tente ser criado com o mesmo **sku** uma exceção deverá ser lançada
-
-        Dois produtos são considerados iguais se os seus skus forem iguais
-
-
-- Ao atualizar um produto, o antigo deve ser sobrescrito com o que esta sendo enviado na requisição
-
-        A requisição deve receber o sku e atualizar com o produto que tbm esta vindo na requisição
+- The Project structure is ASP .NET Core for APIs.

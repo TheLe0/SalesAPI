@@ -24,8 +24,8 @@ namespace API.DAO
         {
             using (var connection = new SqlConnection(Configuration.GetInstance().GetConnectionString()))
             {
-                var sql = @"UPDATE PRODUCT SET NAME = @Name";
-                connection.Execute(sql, new { product.Name });
+                var sql = @"UPDATE PRODUCT SET NAME = @Name WHERE SKU = @Sku";
+                connection.Execute(sql, new { product.Name, product.Sku });
             }
 
             return true;
