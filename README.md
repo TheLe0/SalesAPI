@@ -1,5 +1,7 @@
 # SalesAPI #
 
+[![Build Status](https://dev.azure.com/leobtosin/Caesar%20Cipher/_apis/build/status/TheLe0.SalesAPI?branchName=master)](https://dev.azure.com/leobtosin/Caesar%20Cipher/_build/latest?definitionId=2&branchName=master)
+
 A REST API for Sales Management
 
 ## Specifications ##
