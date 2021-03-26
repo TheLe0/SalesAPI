@@ -31,7 +31,7 @@ namespace API.Controllers
 
             if (!ProductDAO.Exists(sku))
             {
-                return BadRequest("The Sku is already in use!");
+                return BadRequest("No Sku found!");
             }
 
             List<Warehouse> warehouses = WarehouseDAO.Find(sku);
